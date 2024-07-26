@@ -6,12 +6,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.BlockingQueue;
 
 public class Util {
 
@@ -29,8 +26,7 @@ public class Util {
             configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
             configuration.setProperty("hibernate.show_sql", "true");
             configuration.setProperty("hibernate.format_sql", "true");
-            configuration.setProperty("hibernate.hbm2ddl.auto", "update"); // для автоматического создания таблиц
-
+            configuration.setProperty("hibernate.hbm2ddl.auto", "update");
              configuration.addAnnotatedClass(User.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -42,20 +38,16 @@ public class Util {
         }
     }
 
+
     public static SessionFactory getSessionFactory() {
+
         return sessionFactory;
     }
 
     // Connect to MySQL
     public static Connection getMySQLConnection() throws SQLException,
             ClassNotFoundException {
-        String hostName = "localhost";
-
-        String dbName = "mydb";
-        String userName = "root";
-        String password = "password";
-
-        return getMySQLConnection(hostName, dbName, userName, password);
+        return getMySQLConnection("localhost", "mydb", "root", "password");
     }
 
     public static Connection getMySQLConnection(String hostName, String dbName,
@@ -66,8 +58,7 @@ public class Util {
 
         String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
 
-        Connection conn = DriverManager.getConnection(connectionURL, userName,
-                password);
+        Connection conn = DriverManager.getConnection(connectionURL, userName, password);
         return conn;
     }
 }

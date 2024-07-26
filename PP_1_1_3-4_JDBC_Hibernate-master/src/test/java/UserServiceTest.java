@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceTest {
-    private final UserDao userService = new UserDaoHibernateImpl();
+    private final UserDao userService = new UserServiceImpl();
 
     private final String testName = "Ivan";
     private final String testLastName = "Ivanov";
