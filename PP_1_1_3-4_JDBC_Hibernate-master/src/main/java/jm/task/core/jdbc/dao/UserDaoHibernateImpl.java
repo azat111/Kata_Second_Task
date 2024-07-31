@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,29 +75,22 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<User>();
         try (Session session = sf.openSession()) {
             transaction = session.beginTransaction();
-
-            userList = session.createQuery("FROM User").getResultList();
-
+            TypedQuery<User> userlist = session.createQuery("FROM User", User.class);
             transaction.commit();
+
+            return userlist.getResultList();
         }
-        return userList;
     }
 
     @Override
     public void cleanUsersTable() {
-        List<User> userList = new ArrayList<User>();
         try (Session session = sf.openSession()) {
             transaction = session.beginTransaction();
-
-            userList = session.createQuery("FROM User").getResultList();
-
-            for (User user : userList) {
-                session.delete(user);
-            }
-
+            String sql = "TRUNCATE User";
+            Query query = session.createSQLQuery(sql);
+            query.executeUpdate();
             transaction.commit();
         }
     }
